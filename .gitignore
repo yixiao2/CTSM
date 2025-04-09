@@ -120,3 +120,6 @@ core.*
 *.log !run.log
 *.pyc
 Depends
+
+# jupyter notebook
+**/.ipynb_checkpoints

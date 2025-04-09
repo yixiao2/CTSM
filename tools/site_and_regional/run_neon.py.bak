@@ -532,7 +532,7 @@ class NeonSite:
                 )
 
         with Case(case_root, read_only=False) as case:
-            if run_type != "transient":
+            if run_type is not "transient":
                  # in order to avoid the complication of leap years we always set the run_length in units of days.
                  case.set_value("STOP_OPTION", "ndays")
                  case.set_value("REST_OPTION", "end")
@@ -636,9 +636,6 @@ class NeonSite:
                         rundir, self.finidat
                     )
                 ]
-                print("user_nl_lines defined (transient):", user_nl_lines) # Added print statement
-            else:
-                print("self.finidat is None, user_nl_lines not defined for transient.")
         else:
             user_nl_lines = [
                 "hist_fincl2 = ''",
@@ -647,7 +644,6 @@ class NeonSite:
                 "hist_empty_htapes = .true.",
                 "hist_fincl1 = 'TOTECOSYSC', 'TOTECOSYSN', 'TOTSOMC', 'TOTSOMN', 'TOTVEGC', 'TOTVEGN', 'TLAI', 'GPP', 'CPOOL', 'NPP', 'TWS', 'H2OSNO'",
             ]
-            print("user_nl_lines defined (non-transient):", user_nl_lines) # Added print statement
 
         if user_nl_lines:
             with open(user_nl_fname, "a") as fd:
@@ -774,20 +770,6 @@ def main(description):
         user_version
     ) = get_parser(sys.argv, description, valid_neon_sites)
 
-    # Debug: Print the variables returned by get_parser()
-    print("site_list:", site_list)
-    print("output_root:", output_root)
-    print("run_type:", run_type)
-    print("overwrite:", overwrite)
-    print("run_length:", run_length)
-    print("base_case_root:", base_case_root)
-    print("run_from_postad:", run_from_postad)
-    print("setup_only:", setup_only)
-    print("no_batch:", no_batch)
-    print("rerun:", rerun)
-    print("user_version:", user_version)
-    print("valid_neon_sites:", valid_neon_sites) #Print valid sites.
-    
     if output_root:
         logger.debug("output_root : " + output_root)
         if not os.path.exists(output_root):
@@ -807,7 +789,7 @@ def main(description):
        compset = "I1PtClm51Bgc"
 
     # --  Looping over neon sites
-    
+
     for neon_site in available_list:
         if neon_site.name in site_list:
             if run_from_postad:

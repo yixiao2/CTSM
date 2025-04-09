@@ -26,11 +26,6 @@ stream_meshfile_lightng = '$DIN_LOC_ROOT/atm/datm7/NASA_LIS/ESMF_MESH.Li_2016.36
 
 ! h1 output stream 
 hist_fincl2 = 'AR','ELAI','FCEV','FCTR','FGEV','FIRA','FSA','FSH','GPP','H2OSOI',
-             'HR','SNOW_DEPTH','TBOT','TSOI','SOILC_vr','FV','NET_NMIN_vr',
-             'ACT_SOMC_vr','ACT_SOMN_vr','CEL_LITC_vr','CEL_LITN_vr','CWDC_vr','CWDN_vr',
-             'LIG_LITC_vr','LIG_LITN_vr','MET_LITC_vr','MET_LITN_vr','SLO_SOMC_vr','SLO_SOMN_vr',
-             'DWT_DEADCROOTC_TO_CWDC','DWT_FROOTC_TO_CEL_LIT_C','DWT_FROOTC_TO_LIG_LIT_C',
-             'DWT_FROOTC_TO_MET_LIT_C','DWT_LIVECROOTC_TO_CWDC','GAP_MORTALITYC_TO_CEL_LI',
-             'GAP_MORTALITYC_TO_CWDC','GAP_MORTALITYC_TO_LIG_LI','GAP_MORTALITYC_TO_MET_LI'
+             'HR','SNOW_DEPTH','TBOT','TSOI','SOILC_vr','FV','NET_NMIN_vr'
 hist_mfilt(2) = 48
 hist_nhtfrq(2) = 1  

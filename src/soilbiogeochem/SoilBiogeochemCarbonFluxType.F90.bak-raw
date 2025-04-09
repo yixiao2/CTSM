@@ -241,7 +241,7 @@ contains
            this%michr_col(begc:endc) = spval
            call hist_addfld1d (fname='MICC_HR', units='gC/m^2/s', &
              avgflag='A', long_name='microbial C heterotrophic respiration: donor-pool based, so expect zero with MIMICS', &
-             ptr_col=this%michr_col, default='active')
+             ptr_col=this%michr_col, default='inactive')
         end if
 
         this%cwdhr_col(begc:endc) = spval
@@ -278,7 +278,7 @@ contains
            longname =  trim(decomp_cascade_con%decomp_pool_name_long(k))//' potential loss coefficient'
            call hist_addfld_decomp (fname=fieldname, units='1/s',  type2d='levdcmp', &
                 avgflag='A', long_name=longname, &
-                ptr_col=data2dptr, default='active')
+                ptr_col=data2dptr, default='inactive')
         end do
 
         this%decomp_cascade_hr_col(begc:endc,:)             = spval
@@ -309,7 +309,7 @@ contains
                 trim(decomp_cascade_con%decomp_pool_name_long(decomp_cascade_con%cascade_donor_pool(l)))
            call hist_addfld1d (fname=fieldname, units='gC/m^2/s',  &
                 avgflag='A', long_name=longname, &
-                ptr_col=data1dptr, default='active')
+                ptr_col=data1dptr, default='inactive')
 
            !-- transfer fluxes (none from terminal pool, if present)
            if ( decomp_cascade_con%cascade_receiver_pool(l) /= 0 ) then
@@ -321,7 +321,7 @@ contains
                    ' C to '//trim(decomp_cascade_con%decomp_pool_name_long(decomp_cascade_con%cascade_receiver_pool(l)))//' C'
               call hist_addfld1d (fname=fieldname, units='gC/m^2/s', &
                    avgflag='A', long_name=longname, &
-                   ptr_col=data1dptr, default='active')
+                   ptr_col=data1dptr, default='inactive')
            endif
 
            ! output the vertically resolved fluxes 
@@ -347,7 +347,7 @@ contains
                    trim(decomp_cascade_con%decomp_pool_name_long(decomp_cascade_con%cascade_donor_pool(l)))
               call hist_addfld_decomp (fname=fieldname, units='gC/m^3/s',  type2d='levdcmp', &
                    avgflag='A', long_name=longname, &
-                   ptr_col=data2dptr, default='active')
+                   ptr_col=data2dptr, default='inactive')
 
               !-- transfer fluxes (none from terminal pool, if present)
               if ( decomp_cascade_con%cascade_receiver_pool(l) /= 0 ) then
@@ -362,7 +362,7 @@ contains
                       trim(decomp_cascade_con%decomp_pool_name_long(decomp_cascade_con%cascade_receiver_pool(l)))//' C'
                  call hist_addfld_decomp (fname=fieldname, units='gC/m^3/s',  type2d='levdcmp', &
                       avgflag='A', long_name=longname, &
-                      ptr_col=data2dptr, default='active')
+                      ptr_col=data2dptr, default='inactive')
 
                  ! pathfrac_decomp_cascade_col and rf_decomp_cascade_col needed
                  ! when using Newton-Krylov to spin up the decomposition
@@ -376,7 +376,7 @@ contains
                     trim(decomp_cascade_con%decomp_pool_name_long(decomp_cascade_con%cascade_receiver_pool(l)))
                  call hist_addfld_decomp (fname=fieldname, units='fraction',  type2d='levdcmp', &
                     avgflag='A', long_name=longname, &
-                    ptr_col=data2dptr, default='active')
+                    ptr_col=data2dptr, default='inactive')
 
                  data2dptr => this%pathfrac_decomp_cascade_col(:,:,l)
                  fieldname = &
@@ -388,7 +388,7 @@ contains
                     trim(decomp_cascade_con%decomp_pool_name_long(decomp_cascade_con%cascade_receiver_pool(l)))
                  call hist_addfld_decomp (fname=fieldname, units='fraction',  type2d='levdcmp', &
                     avgflag='A', long_name=longname, &
-                    ptr_col=data2dptr, default='active')
+                    ptr_col=data2dptr, default='inactive')
               endif
            end if
 
@@ -427,14 +427,14 @@ contains
               longname =  trim(decomp_cascade_con%decomp_pool_name_long(k))//' C leaching loss'
               call hist_addfld1d (fname=fieldname, units='gC/m^2/s', &
                    avgflag='A', long_name=longname, &
-                   ptr_col=data1dptr, default='active')
+                   ptr_col=data1dptr, default='inactive')
 
               data2dptr => this%decomp_cpools_transport_tendency_col(:,:,k)
               fieldname = trim(decomp_cascade_con%decomp_pool_name_history(k))//'C_TNDNCY_VERT_TRANSPORT'
               longname =  trim(decomp_cascade_con%decomp_pool_name_long(k))//' C tendency due to vertical transport'
               call hist_addfld_decomp (fname=fieldname, units='gC/m^3/s',  type2d='levdcmp', &
                    avgflag='A', long_name=longname, &
-                   ptr_col=data2dptr, default='active')
+                   ptr_col=data2dptr, default='inactive')
            endif
         end do
 
