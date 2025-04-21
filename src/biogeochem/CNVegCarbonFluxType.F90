@@ -364,6 +364,11 @@ module CNVegCarbonFluxType
      real(r8), pointer :: soilc_change_patch                        (:)     ! Total used C from soil          (gC/m2/s)
      integer,  pointer :: actpatch_fire                             (:)      ! Patch indices with fire in current time step
      integer           :: num_actpatch_fire                                  ! Number of patches with fire in current time step
+     
+     ![yixiao 2025Apr]
+     real(r8), pointer :: lf_f_ivt_patch                            (:,:)   ! pftcon%lf_f(patch%itype(begp:endp), 1:ndecomp_pools)
+     real(r8), pointer :: fr_f_ivt_patch                            (:,:)   ! pftcon%fr_f(patch%itype(begp:endp), 1:ndecomp_pools)
+     real(r8), pointer :: wtcol    (:) ! weight (relative to column)
 
      ! Matrix solution arrays for C flux index
      ! Matrix variables
@@ -748,6 +753,12 @@ contains
     allocate(this%npp_growth_patch       (begp:endp)) ; this%npp_growth_patch       (:) = nan
     allocate(this%leafc_change_patch      (begp:endp)) ; this%leafc_change_patch      (:) = nan
     allocate(this%soilc_change_patch      (begp:endp)) ; this%soilc_change_patch      (:) = nan
+    
+    ! [yixiao 2025Apr]
+    allocate(this%lf_f_ivt_patch          (begp:endp,1:ndecomp_pools)) ; this%lf_f_ivt_patch          (:,:) = nan
+    allocate(this%fr_f_ivt_patch          (begp:endp,1:ndecomp_pools)) ; this%fr_f_ivt_patch          (:,:) = nan
+    allocate(this%wtcol         (begp:endp)); this%wtcol      (:) = nan
+    
     ! Allocate Matrix data
     if(use_matrixcn)then
     end if
@@ -2947,32 +2958,62 @@ contains
                ptr_col=data2dptr, default='active')
        end do
        
-       ! [Yi Xiao] output gap_mortality_c_to_litr_c_col; for ext v3
+       ! [yixiao 2025Apr] output gap_mortality_c_to_litr_c_col; for var export v3
        do k = i_litr_min, i_litr_max
           this%gap_mortality_c_to_litr_c_col(begc:endc,:,k) = spval
           data2dptr => this%gap_mortality_c_to_litr_c_col(begc:endc,:,k)
           fieldname = 'GAP_MORTALITYC_TO_'//trim(decomp_cascade_con%decomp_pool_name_history(k))//'_C'
           longname =  'veg to '//trim(decomp_cascade_con%decomp_pool_name_long(k))//' due to gap mortality'
-          call hist_addfld_decomp (fname=fieldname, units='gC/m^2/s',  type2d='levdcmp', &
+          call hist_addfld_decomp (fname=fieldname, units='gC/m^3/s',  type2d='levdcmp', &
                avgflag='A', long_name=longname, &
                ptr_col=data2dptr, default='active')
        end do
 
        this%dwt_livecrootc_to_cwdc_col(begc:endc,:) = spval
-       call hist_addfld_decomp (fname='DWT_LIVECROOTC_TO_CWDC', units='gC/m^2/s',  type2d='levdcmp', &
+       call hist_addfld_decomp (fname='DWT_LIVECROOTC_TO_CWDC', units='gC/m^3/s',  type2d='levdcmp', &
             avgflag='A', long_name='live coarse root to CWD due to landcover change', &
             ptr_col=this%dwt_livecrootc_to_cwdc_col, default='active')
 
        this%dwt_deadcrootc_to_cwdc_col(begc:endc,:) = spval
-       call hist_addfld_decomp (fname='DWT_DEADCROOTC_TO_CWDC', units='gC/m^2/s',  type2d='levdcmp', &
+       call hist_addfld_decomp (fname='DWT_DEADCROOTC_TO_CWDC', units='gC/m^3/s',  type2d='levdcmp', &
             avgflag='A', long_name='dead coarse root to CWD due to landcover change', &
             ptr_col=this%dwt_deadcrootc_to_cwdc_col, default='active')
        
-       ! [Yi Xiao] output gap_mortality_c_to_cwdc_col; for ext v3
+       ! [yixiao 2025Apr] output gap_mortality_c_to_cwdc_col; for var export v3
        this%gap_mortality_c_to_cwdc_col(begc:endc,:) = spval
-       call hist_addfld_decomp (fname='GAP_MORTALITYC_TO_CWDC', units='gC/m^2/s',  type2d='levdcmp', &
+       call hist_addfld_decomp (fname='GAP_MORTALITYC_TO_CWDC', units='gC/m^3/s',  type2d='levdcmp', &
             avgflag='A', long_name='veg to CWD due to gap mortality', &
             ptr_col=this%gap_mortality_c_to_cwdc_col, default='active')
+            
+       ! [yixiao 2025Apr] output lf_f(ivt(p),i); for var export v3
+       ! lf_f is pftcon%lf_f(0:mxpft, 1:ndecomp_pools)
+       ! ivt is patch%itype(begp:endp)
+       do k = i_litr_min, i_litr_max
+          this%lf_f_ivt_patch(begp:endp,k) = spval
+          data1dptr => this%lf_f_ivt_patch(begp:endp,k)
+          fieldname = 'LF_LITRFRAC_TO_'//trim(decomp_cascade_con%decomp_pool_name_history(k))//''
+          longname =  'leaf litter fraction to '//trim(decomp_cascade_con%decomp_pool_name_long(k))//' in patch'
+          call hist_addfld1d (fname=fieldname, units='proportion', &
+               avgflag='A', long_name=longname, &
+               ptr_patch=data1dptr, default='inactive')
+       end do
+       ! [yixiao 2025Apr] output fr_f(ivt(p),i); for var export v3
+       ! fr_f is pftcon%fr_f(0:mxpft, 1:ndecomp_pools)
+       ! ivt is patch%itype(begp:endp)
+       do k = i_litr_min, i_litr_max
+          this%fr_f_ivt_patch(begp:endp,k) = spval
+          data1dptr => this%fr_f_ivt_patch(begp:endp,k)
+          fieldname = 'FR_LITRFRAC_TO_'//trim(decomp_cascade_con%decomp_pool_name_history(k))//''
+          longname =  'fine root litter fraction to '//trim(decomp_cascade_con%decomp_pool_name_long(k))//' in patch'
+          call hist_addfld1d (fname=fieldname, units='proportion', &
+               avgflag='A', long_name=longname, &
+               ptr_patch=data1dptr, default='inactive')
+       end do
+       ! [yixiao 2025Apr] output patch%wtcol(begp:endp)
+       this%wtcol(begp:endp) = spval
+       call hist_addfld1d (fname='WTCOL', units='proportion', &
+            avgflag='A', long_name='patch%wtcol', &
+            ptr_patch=this%wtcol, default='inactive')
 
        this%crop_seedc_to_leaf_patch(begp:endp) = spval
        call hist_addfld1d (fname='CROP_SEEDC_TO_LEAF', units='gC/m^2/s', &
@@ -4079,6 +4120,13 @@ contains
        this%npp_growth_patch(i)      = value_patch
        this%leafc_change_patch(i)    = value_patch
        this%soilc_change_patch(i)    = value_patch
+       
+       ! [yixiao]
+       do k = i_litr_min, i_litr_max
+           this%lf_f_ivt_patch(i,k)        = value_patch
+           this%fr_f_ivt_patch(i,k)        = value_patch
+       end do
+       this%wtcol(i)                 = value_patch
     end do
 
     do fi = 1,num_column
@@ -4568,6 +4616,14 @@ contains
             this%hrv_xsmrpool_to_atm_patch(p)              + &
             this%hrv_gresp_storage_to_litter_patch(p)      + &
             this%hrv_gresp_xfer_to_litter_patch(p)
+
+       ! [yixiao]
+       ! this%lf_f_ivt_patch(p,:) = this%lf_f(this%ivt(p),:)
+       do l = i_litr_min, i_litr_max
+          this%lf_f_ivt_patch(p,l) = pftcon%lf_f(patch%itype(p),l)
+          this%fr_f_ivt_patch(p,l) = pftcon%fr_f(patch%itype(p),l)
+       end do
+       this%wtcol(p) = patch%wtcol(p)
 
     end do  ! end of patches loop
 
