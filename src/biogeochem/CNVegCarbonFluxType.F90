@@ -1244,6 +1244,102 @@ contains
             avgflag='A', long_name='growth respiration transfer fire mortality to litter', &
             ptr_patch=this%m_gresp_xfer_to_litter_fire_patch, default='inactive')   
 
+       ! add by Yi X.
+       this%hrv_leafc_to_litter_patch(begp:endp) = spval
+       call hist_addfld1d (fname='HRV_LEAFC_TO_LITTER', units='gC/m^2/s', &
+            avgflag='A', long_name='leaf C harvest mortality', &
+            ptr_patch=this%hrv_leafc_to_litter_patch, default='inactive')
+
+       this%hrv_leafc_storage_to_litter_patch(begp:endp) = spval
+       call hist_addfld1d (fname='HRV_LEAFC_STORAGE_TO_LITTER', units='gC/m^2/s', &
+            avgflag='A', long_name='leaf C storage harvest mortality', &
+            ptr_patch=this%hrv_leafc_storage_to_litter_patch, default='inactive')
+            
+       this%hrv_leafc_xfer_to_litter_patch(begp:endp) = spval
+       call hist_addfld1d (fname='HRV_LEAFC_XFER_TO_LITTER', units='gC/m^2/s', &
+            avgflag='A', long_name='leaf C transfer harvest mortality', &
+            ptr_patch=this%hrv_leafc_xfer_to_litter_patch, default='inactive')
+
+       this%hrv_frootc_to_litter_patch(begp:endp) = spval
+       call hist_addfld1d (fname='HRV_FROOTC_TO_LITTER', units='gC/m^2/s', &
+            avgflag='A', long_name='fine root C harvest mortality', &
+            ptr_patch=this%hrv_frootc_to_litter_patch, default='inactive')
+
+       this%hrv_frootc_storage_to_litter_patch(begp:endp) = spval
+       call hist_addfld1d (fname='HRV_FROOTC_STORAGE_TO_LITTER', units='gC/m^2/s', &
+            avgflag='A', long_name='fine root C storage harvest mortality', &
+            ptr_patch=this%hrv_frootc_storage_to_litter_patch, default='inactive')
+
+       this%hrv_frootc_xfer_to_litter_patch(begp:endp) = spval
+       call hist_addfld1d (fname='HRV_FROOTC_XFER_TO_LITTER', units='gC/m^2/s', &
+            avgflag='A', long_name='fine root C transfer harvest mortality', &
+            ptr_patch=this%hrv_frootc_xfer_to_litter_patch, default='inactive')
+
+       this%hrv_livestemc_to_litter_patch(begp:endp) = spval
+       call hist_addfld1d (fname='HRV_LIVESTEMC_TO_LITTER', units='gC/m^2/s', &
+            avgflag='A', long_name='live stem C harvest mortality', &
+            ptr_patch=this%hrv_livestemc_to_litter_patch, default='inactive')
+
+       this%hrv_livestemc_storage_to_litter_patch(begp:endp) = spval
+       call hist_addfld1d (fname='HRV_LIVESTEMC_STORAGE_TO_LITTER', units='gC/m^2/s', &
+            avgflag='A', long_name='live stem C storage harvest mortality', &
+            ptr_patch=this%hrv_livestemc_storage_to_litter_patch, default='inactive')
+
+       this%hrv_livestemc_xfer_to_litter_patch(begp:endp) = spval
+       call hist_addfld1d (fname='HRV_LIVESTEMC_XFER_TO_LITTER', units='gC/m^2/s', &
+            avgflag='A', long_name='live stem C transfer harvest mortality', &
+            ptr_patch=this%hrv_livestemc_xfer_to_litter_patch, default='inactive')
+
+       this%hrv_deadstemc_storage_to_litter_patch(begp:endp) = spval
+       call hist_addfld1d (fname='HRV_DEADSTEMC_STORAGE_TO_LITTER', units='gC/m^2/s', &
+            avgflag='A', long_name='dead stem C storage harvest mortality', &
+            ptr_patch=this%hrv_deadstemc_storage_to_litter_patch, default='inactive')
+
+       this%hrv_deadstemc_xfer_to_litter_patch(begp:endp) = spval
+       call hist_addfld1d (fname='HRV_DEADSTEMC_XFER_TO_LITTER', units='gC/m^2/s', &
+            avgflag='A', long_name='dead stem C transfer harvest mortality', &
+            ptr_patch=this%hrv_deadstemc_xfer_to_litter_patch, default='inactive')
+
+       this%hrv_livecrootc_to_litter_patch(begp:endp) = spval
+       call hist_addfld1d (fname='HRV_LIVECROOTC_TO_LITTER', units='gC/m^2/s', &
+            avgflag='A', long_name='live coarse root C harvest mortality', &
+            ptr_patch=this%hrv_livecrootc_to_litter_patch, default='inactive')
+
+       this%hrv_livecrootc_storage_to_litter_patch(begp:endp) = spval
+       call hist_addfld1d (fname='HRV_LIVECROOTC_STORAGE_TO_LITTER', units='gC/m^2/s', &
+            avgflag='A', long_name='live coarse root C storage harvest mortality', &
+            ptr_patch=this%hrv_livecrootc_storage_to_litter_patch, default='inactive')
+
+       this%hrv_livecrootc_xfer_to_litter_patch(begp:endp) = spval
+       call hist_addfld1d (fname='HRV_LIVECROOTC_XFER_TO_LITTER', units='gC/m^2/s', &
+            avgflag='A', long_name='live coarse root C transfer harvest mortality', &
+            ptr_patch=this%hrv_livecrootc_xfer_to_litter_patch, default='inactive')
+
+       this%hrv_deadcrootc_to_litter_patch(begp:endp) = spval
+       call hist_addfld1d (fname='HRV_DEADCROOTC_TO_LITTER', units='gC/m^2/s', &
+            avgflag='A', long_name='dead coarse root C harvest mortality', &
+            ptr_patch=this%hrv_deadcrootc_to_litter_patch, default='inactive')
+
+       this%hrv_deadcrootc_storage_to_litter_patch(begp:endp) = spval
+       call hist_addfld1d (fname='HRV_DEADCROOTC_STORAGE_TO_LITTER', units='gC/m^2/s', &
+            avgflag='A', long_name='dead coarse root C storage harvest mortality', &
+            ptr_patch=this%hrv_deadcrootc_storage_to_litter_patch, default='inactive')
+
+       this%hrv_deadcrootc_xfer_to_litter_patch(begp:endp) = spval
+       call hist_addfld1d (fname='HRV_DEADCROOTC_XFER_TO_LITTER', units='gC/m^2/s', &
+            avgflag='A', long_name='dead coarse root C transfer harvest mortality', &
+            ptr_patch=this%hrv_deadcrootc_xfer_to_litter_patch, default='inactive')
+
+       this%hrv_gresp_storage_to_litter_patch(begp:endp) = spval
+       call hist_addfld1d (fname='HRV_GRESP_STORAGE_TO_LITTER', units='gC/m^2/s', &
+            avgflag='A', long_name='growth respiration storage harvest mortality', &
+            ptr_patch=this%hrv_gresp_storage_to_litter_patch, default='inactive')
+
+       this%hrv_gresp_xfer_to_litter_patch(begp:endp) = spval
+       call hist_addfld1d (fname='HRV_GRESP_XFER_TO_LITTER', units='gC/m^2/s', &
+            avgflag='A', long_name='growth respiration transfer harvest mortality', &
+            ptr_patch=this%hrv_gresp_xfer_to_litter_patch, default='inactive')
+
        this%leafc_xfer_to_leafc_patch(begp:endp) = spval
        call hist_addfld1d (fname='LEAFC_XFER_TO_LEAFC', units='gC/m^2/s', &
             avgflag='A', long_name='leaf C growth from storage', &
